@@ -4,19 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crated.R
 import com.example.crated.ui.common.CrateSearchBar
+import com.example.crated.ui.common.CratedTopBar
+import com.example.crated.ui.theme.CratedTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,32 +36,13 @@ fun HomePage(
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(id = R.drawable.crated_logo),
-                            contentDescription = null,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Crated", fontWeight = FontWeight.Bold)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onNavigateToUser) {
-                        Image(
-                            painter = painterResource(R.drawable.profile),
-                            contentDescription = "User Profile")
-                    }
-                }
-            )
+            CratedTopBar(onProfileClick = onNavigateToUser)
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToCreateSet,
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 // FAB for set creation
                 Image(
@@ -120,5 +97,7 @@ fun HomePage(
 @Preview(showBackground = true)
 @Composable
 fun HomePagePreview() {
-    HomePage()
+    CratedTheme {
+        HomePage()
+    }
 }

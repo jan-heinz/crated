@@ -22,7 +22,6 @@ import com.example.crated.ui.theme.CratedTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfileTopBar(
-    username: String,
     onBackClick: () -> Unit,
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -52,7 +51,7 @@ fun UserProfileTopBar(
         },
         title = {
             Text(
-                text = username,
+                text = "Profile",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -83,7 +82,6 @@ fun UserProfileTopBar(
 fun UserProfileTopBarPreview() {
     CratedTheme {
         UserProfileTopBar(
-            username = "janheinz",
             onBackClick = {},
             onSettingsClick = {}
         )

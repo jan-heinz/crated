@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crated.R
 import com.example.crated.ui.common.CrateSearchBar
 import com.example.crated.ui.common.CratedTopBar
+import com.example.crated.ui.common.SetCard
 import com.example.crated.ui.theme.CratedTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +34,7 @@ fun HomePage(
     viewModel: HomeViewModel = viewModel(),
     onNavigateToUser: () -> Unit = {},
     onNavigateToCreateSet: () -> Unit = {},
+    onNavigateToReviewSet: (String) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -47,7 +49,7 @@ fun HomePage(
                 // FAB for set creation
                 Image(
                     painter = painterResource(R.drawable.add),
-                    contentDescription = "User Profile")
+                    contentDescription = "Add set")
             }
         }
     ) { innerPadding ->
@@ -68,29 +70,48 @@ fun HomePage(
                 fontWeight = FontWeight.SemiBold
             )
             
-            // LazyColumn of sets (Not populated yet)
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 80.dp)
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 80.dp
+                )
             ) {
-                // Placeholder for sets, eventually have this render only if list is not populated
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            "Sets will appear here...",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.outline
+                if (viewModel.visibleSets.isEmpty()) {
+                    item {
+                        EmptySetResults()
+                    }
+                } else {
+                    items(
+                        items = viewModel.visibleSets,
+                        key = { set -> set.id }
+                    ) { set ->
+                        SetCard(
+                            set = set,
+                            onClick = { onNavigateToReviewSet(set.id) },
+                            modifier = Modifier.padding(bottom = 12.dp)
                         )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun EmptySetResults() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            "No sets found.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 
